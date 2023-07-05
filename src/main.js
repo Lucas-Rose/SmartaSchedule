@@ -120,6 +120,36 @@ floatage90Text.id = "floatage90Text"
 floatage90Text.classList.add("toolElement")
 floatage90Text.innerText = "Single Floatage (90)"
 
+//Saunage 45
+let saunage45Item = gridContainer.appendChild(document.createElement("div"))
+saunage45Item.id = "saunage45Item"
+saunage45Item.classList.add("toolElement")
+saunage45Item.classList.add("gridItem")
+let saunage45Text = saunage45Item.appendChild(document.createElement("h3"))
+saunage45Text.id = "saunage45Text"
+saunage45Text.classList.add("toolElement")
+saunage45Text.innerText = "Saunage (45)"
+
+//Saunage 60
+let saunage60Item = gridContainer.appendChild(document.createElement("div"))
+saunage60Item.id = "saunage60Item"
+saunage60Item.classList.add("toolElement")
+saunage60Item.classList.add("gridItem")
+let saunage60Text = saunage60Item.appendChild(document.createElement("h3"))
+saunage60Text.id = "saunage60Text"
+saunage60Text.classList.add("toolElement")
+saunage60Text.innerText = "Saunage (60)"
+
+//Saunage 90
+let saunage90Item = gridContainer.appendChild(document.createElement("div"))
+saunage90Item.id = "saunage90Item"
+saunage90Item.classList.add("toolElement")
+saunage90Item.classList.add("gridItem")
+let saunage90Text = saunage90Item.appendChild(document.createElement("h3"))
+saunage90Text.id = "saunage90Text"
+saunage90Text.classList.add("toolElement")
+saunage90Text.innerText = "Saunage (90)"
+
 // Couples Floatage
 let cFloatageItem = gridContainer.appendChild(document.createElement("div"))
 cFloatageItem.id = "cFloatageItem"
@@ -245,6 +275,18 @@ addEventListener("click", (event) => {
     }
     if (event.target.id == "cwp90Item" || event.target.id == "cwp90Text") {
         findBestCWP(floats, saunas, massages, 105)
+        deactivateTool();
+    }
+    if (event.target.id == "saunage45Item" || event.target.id == "saunage45Text") {
+        findBestSaunage(saunas, massages, 60)
+        deactivateTool();
+    }
+    if (event.target.id == "saunage60Item" || event.target.id == "saunage60Text") {
+        findBestSaunage(saunas, massages, 75)
+        deactivateTool();
+    }
+    if (event.target.id == "saunage90Item" || event.target.id == "saunage90Text") {
+        findBestSaunage(saunas, massages, 105)
         deactivateTool();
     }
 })
@@ -475,6 +517,28 @@ function findBestFlauna(floats, saunas) {
     }
 }
 
+//Still needs work to prioritise couples saunage + ccwp
+function findBestSaunage(saunas, massages, massageDuration){
+    for(let i = 0; i < saunas.length; i ++){
+        let saunaTime = getAbsoluteTime(saunas[i].dataset.dropDescription)
+        for(let j = 0; j < massageTimes.length; j ++){
+            if(massageTimes[j] == saunaTime + 60 || saunaTime == massageTimes[j] + massageDuration){
+                for(let k = 0; k < floatTimes.length; k ++){
+                    if(floatTimes[k] == massageTimes[j] + massageDuration || floatTimes[k] == saunaTime + 60){
+                        saunas[i].innerHTML = "<div class='priority2'><h3 class='priorityTag'>Priority 2</h3></div>";
+                        massages[j].innerHTML = "<div class='priority2'><h3 class='priorityTag'>Priority 2</h3></div>";
+                    }
+                    else{
+                        saunas[i].innerHTML = "<div class='priority1'><h3 class='priorityTag'>Priority 1</h3></div>";
+                        massages[j].innerHTML = "<div class='priority1'><h3 class='priorityTag'>Priority 1</h3></div>";
+                    }
+                }
+            }
+        }
+    }
+}
+
+//Still needs work to prioritise couples saunage + ccwp
 function findBestFloatage(floats, massages, massageLength) {
     canvas.style.visibility = "visible";
     for (let i = 0; i < massages.length; i++) {
