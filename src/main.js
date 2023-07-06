@@ -700,27 +700,43 @@ function findBestMassage(massages, massageDuration) {
 function findBestFlauna(floats, saunas) {
     for (let i = 0; i < saunas.length; i++) {
         let saunaTime = getAbsoluteTime(saunas[i].dataset.dropDescription)
-        for(let j = 0; j < floatTimes.length; j ++){
-            if(floatTimes[j] == saunaTime + 60){
-                for(let k = 0; k < massageDurations.length; k ++){
+        for (let j = 0; j < floatTimes.length; j++) {
+            if (floatTimes[j] == saunaTime + 60) {
+                for (let k = 0; k < massageDurations.length; k++) {
                     //Priority 1 no massages before or after
-                    if(!valueInArray(saunaTime - massageDurations[k], massageTimes) && !valueInArray(saunaTime + 150, massageTimes)){
+                    if (!valueInArray(saunaTime - massageDurations[k], massageTimes) && !valueInArray(saunaTime + 150, massageTimes)) {
                         saunas[i].innerHTML = Priority(1)
                         floats[j].innerHTML = Priority(1)
                     }
                     //Priority 2 a massage before or after
-                    if(valueInArray(saunaTime - massageDurations[k], massageTimes) || valueInArray(saunaTime + 150, massageTimes)){
+                    if (valueInArray(saunaTime - massageDurations[k], massageTimes) || valueInArray(saunaTime + 150, massageTimes)) {
                         saunas[i].innerHTML = Priority(2)
                         floats[j].innerHTML = Priority(2)
                     }
-                    for(let l = 0; l < massageTimes.length; l ++){
-                        if(noOverlap(getRoomNumber(massages[l].dataset.dropDescription), getAbsoluteTime(massages[l].dataset.dropDescription), getAbsoluteTime(massages[l].dataset.dropDescription) + massageDurations[k])){
-                            //Priority 3 couples massage before or after
-                            for(let o = 0; o < massageTimes.length; o ++){
-                                if(k != o){
-                                    if(massageTimes[k] == massageTimes[o] && (valueInArray(saunaTime - massageDurations[k], massageTimes) || valueInArray(saunaTime + 150, massageTimes))){
-                                        saunas[i].innerHTML = Priority(3)
-                                        floats[j].innerHTML = Priority(3)
+                    //Priority 3 couples massage before or after
+                    for (let l = 0; l < massageTimes.length; l++) {
+                        // massage > sauna > float
+                        if (saunaTime - massageDurations[k] == massageTimes[l]) {
+                            for (let o = 0; o < massageTimes.length; o++) {
+                                if (l != o) {
+                                    if (massageTimes[l] == massageTimes[o]) {
+                                        if (noOverlap(getRoomNumber(massages[l].dataset.dropDescription), massageTimes[l], massageTimes[l] + massageDurations[k]) && noOverlap(getRoomNumber(massages[o].dataset.dropDescription), massageTimes[o], massageTimes[o] + massageDurations[k])) {
+                                            saunas[i].innerHTML = Priority(3)
+                                            floats[j].innerHTML = Priority(3)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        // sauna > float > massage
+                        if (saunaTime + 150 == massageTimes[l]) {
+                            for (let o = 0; o < massageTimes.length; o++) {
+                                if (l != o) {
+                                    if (massageTimes[l] == massageTimes[o]) {
+                                        if (noOverlap(getRoomNumber(massages[l].dataset.dropDescription), massageTimes[l], massageTimes[l] + massageDurations[k]) && noOverlap(getRoomNumber(massages[o].dataset.dropDescription), massageTimes[o], massageTimes[o] + massageDurations[k])) {
+                                            saunas[i].innerHTML = Priority(3)
+                                            floats[j].innerHTML = Priority(3)
+                                        }
                                     }
                                 }
                             }
@@ -728,7 +744,7 @@ function findBestFlauna(floats, saunas) {
                     }
                 }
             }
-        }   
+        }
     }
 }
 
