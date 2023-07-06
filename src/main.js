@@ -150,17 +150,67 @@ saunage90Text.id = "saunage90Text"
 saunage90Text.classList.add("toolElement")
 saunage90Text.innerText = "Saunage (90)"
 
-// Couples Floatage
-let cFloatageItem = gridContainer.appendChild(document.createElement("div"))
-cFloatageItem.id = "cFloatageItem"
-cFloatageItem.classList.add("toolElement")
-cFloatageItem.classList.add("gridItem")
-let cFloatageText = cFloatageItem.appendChild(document.createElement("h3"))
-cFloatageText.id = "cFloatageText"
-cFloatageText.classList.add("toolElement")
-cFloatageText.innerText = "Couples Floatage (45)"
+// Couples Floatage 45
+let cFloatage45Item = gridContainer.appendChild(document.createElement("div"))
+cFloatage45Item.id = "cFloatage45Item"
+cFloatage45Item.classList.add("toolElement")
+cFloatage45Item.classList.add("gridItem")
+let cFloatage45Text = cFloatage45Item.appendChild(document.createElement("h3"))
+cFloatage45Text.id = "cFloatage45Text"
+cFloatage45Text.classList.add("toolElement")
+cFloatage45Text.innerText = "Couples Floatage (45)"
 
-//CWP
+// Couples Floatage 60
+let cFloatage60Item = gridContainer.appendChild(document.createElement("div"))
+cFloatage60Item.id = "cFloatage60Item"
+cFloatage60Item.classList.add("toolElement")
+cFloatage60Item.classList.add("gridItem")
+let cFloatage60Text = cFloatage60Item.appendChild(document.createElement("h3"))
+cFloatage60Text.id = "cFloatage60Text"
+cFloatage60Text.classList.add("toolElement")
+cFloatage60Text.innerText = "Couples Floatage (60)"
+
+// Couples Floatage 90
+let cFloatage90Item = gridContainer.appendChild(document.createElement("div"))
+cFloatage90Item.id = "cFloatage90Item"
+cFloatage90Item.classList.add("toolElement")
+cFloatage90Item.classList.add("gridItem")
+let cFloatage90Text = cFloatage90Item.appendChild(document.createElement("h3"))
+cFloatage90Text.id = "cFloatage90Text"
+cFloatage90Text.classList.add("toolElement")
+cFloatage90Text.innerText = "Couples Floatage (90)"
+
+// Couples Saunage 45
+let cSaunage45Item = gridContainer.appendChild(document.createElement("div"))
+cSaunage45Item.id = "cSaunage45Item"
+cSaunage45Item.classList.add("toolElement")
+cSaunage45Item.classList.add("gridItem")
+let cSaunage45Text = cSaunage45Item.appendChild(document.createElement("h3"))
+cSaunage45Text.id = "cSaunage45Text"
+cSaunage45Text.classList.add("toolElement")
+cSaunage45Text.innerText = "Couples Saunage (45)"
+
+// Couples Saunage 60
+let cSaunage60Item = gridContainer.appendChild(document.createElement("div"))
+cSaunage60Item.id = "cSaunage60Item"
+cSaunage60Item.classList.add("toolElement")
+cSaunage60Item.classList.add("gridItem")
+let cSaunage60Text = cSaunage60Item.appendChild(document.createElement("h3"))
+cSaunage60Text.id = "cSaunage60Text"
+cSaunage60Text.classList.add("toolElement")
+cSaunage60Text.innerText = "Couples Saunage (60)"
+
+// Couples Saunage 90
+let cSaunage90Item = gridContainer.appendChild(document.createElement("div"))
+cSaunage90Item.id = "cSaunage90Item"
+cSaunage90Item.classList.add("toolElement")
+cSaunage90Item.classList.add("gridItem")
+let cSaunage90Text = cSaunage90Item.appendChild(document.createElement("h3"))
+cSaunage90Text.id = "cSaunage90Text"
+cSaunage90Text.classList.add("toolElement")
+cSaunage90Text.innerText = "Couples Saunage (90)"
+
+//CWP 45
 let cwp45Item = gridContainer.appendChild(document.createElement("div"))
 cwp45Item.id = "cwp45Item"
 cwp45Item.classList.add("toolElement")
@@ -170,7 +220,7 @@ cwp45Text.id = "cwp45Text"
 cwp45Text.classList.add("toolElement")
 cwp45Text.innerText = "Complete Wellness (45)"
 
-//CWP
+//CWP 60
 let cwp60Item = gridContainer.appendChild(document.createElement("div"))
 cwp60Item.id = "cwp60Item"
 cwp60Item.classList.add("toolElement")
@@ -180,7 +230,7 @@ cwp60Text.id = "cwp60Text"
 cwp60Text.classList.add("toolElement")
 cwp60Text.innerText = "Complete Wellness (60)"
 
-//CWP
+//CWP 90
 let cwp90Item = gridContainer.appendChild(document.createElement("div"))
 cwp90Item.id = "cwp90Item"
 cwp90Item.classList.add("toolElement")
@@ -190,15 +240,35 @@ cwp90Text.id = "cwp90Text"
 cwp90Text.classList.add("toolElement")
 cwp90Text.innerText = "Complete Wellness (90)"
 
-//CCWP
-let ccwpItem = gridContainer.appendChild(document.createElement("div"))
-ccwpItem.id = "ccwpItem"
-ccwpItem.classList.add("toolElement")
-ccwpItem.classList.add("gridItem")
-let ccwpText = ccwpItem.appendChild(document.createElement("h3"))
-ccwpText.id = "ccwpText"
-ccwpText.classList.add("toolElement")
-ccwpText.innerText = "Couples Complete Wellness (45)"
+//CCWP 45
+let ccwp45Item = gridContainer.appendChild(document.createElement("div"))
+ccwp45Item.id = "ccwp45Item"
+ccwp45Item.classList.add("toolElement")
+ccwp45Item.classList.add("gridItem")
+let ccwp45Text = ccwp45Item.appendChild(document.createElement("h3"))
+ccwp45Text.id = "ccwp45Text"
+ccwp45Text.classList.add("toolElement")
+ccwp45Text.innerText = "Couples Complete Wellness (45)"
+
+//CCWP 60
+let ccwp60Item = gridContainer.appendChild(document.createElement("div"))
+ccwp60Item.id = "ccwp60Item"
+ccwp60Item.classList.add("toolElement")
+ccwp60Item.classList.add("gridItem")
+let ccwp60Text = ccwp60Item.appendChild(document.createElement("h3"))
+ccwp60Text.id = "ccwp60Text"
+ccwp60Text.classList.add("toolElement")
+ccwp60Text.innerText = "Couples Complete Wellness (60)"
+
+//CCWP 90
+let ccwp90Item = gridContainer.appendChild(document.createElement("div"))
+ccwp90Item.id = "ccwp90Item"
+ccwp90Item.classList.add("toolElement")
+ccwp90Item.classList.add("gridItem")
+let ccwp90Text = ccwp90Item.appendChild(document.createElement("h3"))
+ccwp90Text.id = "ccwp90Text"
+ccwp90Text.classList.add("toolElement")
+ccwp90Text.innerText = "Couples Complete Wellness (90)"
 
 let bookingArray = null;
 let floats = null;
