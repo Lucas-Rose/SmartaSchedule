@@ -368,26 +368,26 @@ function findBestFloat(floats) {
         let floatTime = getAbsoluteTime(floats[i].dataset.dropDescription)
         //Priority 1 if nothing aligns
         if (!valueInArray(floatTime - 60, saunaTimes) && !valueInArray(floatTime - 60, massageTimes) && !valueInArray(floatTime - 75, massageTimes) && !valueInArray(floatTime - 105, massageTimes) && !valueInArray(floatTime + 90, massageTimes)) {
-            floats[i].innerHTML = "<div class='priority1'><h3 class='priorityTag'>Priority 1</h3></div>"
+            floats[i].innerHTML = Priority(1)
         }
         //Priority 2 if singular sauna or massage aligns
         if (valueInArray(floatTime - 60, saunaTimes) || valueInArray(floatTime - 60, massageTimes) || valueInArray(floatTime - 75, massageTimes) || valueInArray(floatTime - 105, massageTimes) || valueInArray(floatTime + 90, massageTimes)) {
-            floats[i].innerHTML = "<div class='priority2'><h3 class='priorityTag'>Priority 2</h3></div>"
+            floats[i].innerHTML = Priority(2)
         }
 
         //Priority 3 if aligns with single cwp
         for(let j = 0; j < massageDurations.length; j ++){
             //massage > sauna > float
             if(valueInArray(floatTime - 60 - massageDurations[j], massageTimes) && valueInArray(floatTime - 60, saunaTimes)){
-                floats[i].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>"
+                floats[i].innerHTML = Priority(3)
             }
             //sauna > massage > float
             if(valueInArray(floatTime - massageDurations[j] - 60, saunaTimes) && valueInArray(floatTime - massageDurations[j], massageTimes)){
-                floats[i].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>"
+                floats[i].innerHTML = Priority(3)
             }
             //sauna > float > massage
             if(valueInArray(floatTime - 60, saunaTimes) && valueInArray(floatTime + 90, massageTimes)){
-                floats[i].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>"
+                floats[i].innerHTML = Priority(3)
             }
         }
 
@@ -398,7 +398,7 @@ function findBestFloat(floats) {
                     for(let l = 0; l < massageTimes.length; l++){
                         if(k != l){
                             if(massageTimes[k] == massageTimes[l]){
-                                floats[i].innerHTML = "<div class='priority4'><h3 class='priorityTag'>Priority 4</h3></div>"
+                                floats[i].innerHTML = Priority(4)
                             }
                         }
                     }
@@ -410,7 +410,7 @@ function findBestFloat(floats) {
                 for (let k = 0; k < massageTimes.length; k++) {
                     if (j != k) {
                         if (massageTimes[k] == massageTimes[j]) {
-                            floats[i].innerHTML = "<div class='priority4'><h3 class='priorityTag'>Priority 4</h3></div>"
+                            floats[i].innerHTML = Priority(4)
                         }
                     }
                 }
@@ -426,7 +426,7 @@ function findBestFloat(floats) {
                             if(massageTimes[k] == massageTimes[l]){
                                 for(let o = 0; o < saunaTimes.length; o ++){
                                     if(saunaTimes[o] == floatTime - massageDurations[j] - 60){
-                                        floats[i].innerHTML = "<div class='priority5'><h3 class='priorityTag'>Priority 5</h3></div>"
+                                        floats[i].innerHTML = Priority(5)
                                     }
                                 }
                             }
@@ -442,7 +442,7 @@ function findBestFloat(floats) {
                         if (massageTimes[k] == massageTimes[j]) {
                             for(let l = 0; l < saunaTimes.length; l++){
                                 if(saunaTimes[l] == floatTime - 60){
-                                    floats[i].innerHTML = "<div class='priority5'><h3 class='priorityTag'>Priority 5</h3></div>"
+                                    floats[i].innerHTML = Priority(5)
                                 }
                             }
                         }
@@ -458,26 +458,26 @@ function findBestSauna(saunas) {
         let saunaTime = getAbsoluteTime(saunas[i].dataset.dropDescription)
         //Priority 1 if nothing aligns
         if (!valueInArray(saunaTime - 60, massageTimes) && !valueInArray(saunaTime - 75, massageTimes) && !valueInArray(saunaTime - 105, massageTimes) && !valueInArray(saunaTime + 60, floatTimes) && !valueInArray(saunaTime + 60, massageTimes)) {
-            saunas[i].innerHTML = "<div class='priority1'><h3 class='priorityTag'>Priority 1</h3></div>"
+            saunas[i].innerHTML = Priority(1)
         }
         //Priority 2 if singular sauna or massage aligns
         if (valueInArray(saunaTime - 60, massageTimes) || valueInArray(saunaTime - 75, massageTimes) || valueInArray(saunaTime - 105, massageTimes) || valueInArray(saunaTime + 60, floatTimes) || valueInArray(saunaTime + 60, massageTimes)) {
-            saunas[i].innerHTML = "<div class='priority2'><h3 class='priorityTag'>Priority 2</h3></div>"
+            saunas[i].innerHTML = Priority(2)
         }
 
         //Priority 3 if aligns with single cwp
         for(let j = 0; j < massageDurations.length; j ++){
             //massage > sauna > float
             if(valueInArray(saunaTime - massageDurations[j], massageTimes) && valueInArray(saunaTime + 60, floatTimes)){
-                saunas[i].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>"
+                saunas[i].innerHTML = Priority(3)
             }
             //sauna > massage > float
             if(valueInArray(saunaTime + 60, massageTimes) && valueInArray(saunaTime + 60 + massageDurations[j], floatTimes)){
-                saunas[i].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>"
+                saunas[i].innerHTML = Priority(3)
             }
             //sauna > float > massage
             if(valueInArray(saunaTime + 60, floatTimes) && valueInArray(saunaTime + 150, massageTimes)){
-                saunas[i].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>"
+                saunas[i].innerHTML = Priority(3)
             }
         }
 
@@ -488,7 +488,7 @@ function findBestSauna(saunas) {
                     for(let l = 0; l < massageTimes.length; l++){
                         if(k != l){
                             if(massageTimes[k] == massageTimes[l]){
-                                saunas[i].innerHTML = "<div class='priority4'><h3 class='priorityTag'>Priority 4</h3></div>"
+                                saunas[i].innerHTML = Priority(4)
                             }
                         }
                     }
@@ -500,7 +500,7 @@ function findBestSauna(saunas) {
                 for (let k = 0; k < massageTimes.length; k++) {
                     if (j != k) {
                         if (massageTimes[k] == massageTimes[j]) {
-                            saunas[i].innerHTML = "<div class='priority4'><h3 class='priorityTag'>Priority 4</h3></div>"
+                            saunas[i].innerHTML = Priority(4)
                         }
                     }
                 }
@@ -517,7 +517,7 @@ function findBestSauna(saunas) {
                             if(massageTimes[k] == massageTimes[l]){
                                 for(let o = 0; o < floatTimes.length; o ++){
                                     if(floatTimes[o] == saunaTime + 60){
-                                        saunas[i].innerHTML = "<div class='priority5'><h3 class='priorityTag'>Priority 5</h3></div>"
+                                        saunas[i].innerHTML = Priority(5)
                                     }
                                 }
                             }
@@ -533,7 +533,7 @@ function findBestSauna(saunas) {
                             if(massageTimes[k] == massageTimes[l]){
                                 for(let o = 0; o < floatTimes.length; o ++){
                                     if(floatTimes[o] == saunaTime + 60 + massageDurations[j]){
-                                        saunas[i].innerHTML = "<div class='priority5'><h3 class='priorityTag'>Priority 5</h3></div>"
+                                        saunas[i].innerHTML = Priority(5)
                                     }
                                 }
                             }
@@ -549,7 +549,7 @@ function findBestSauna(saunas) {
                             if(massageTimes[k] == massageTimes[l]){
                                 for(let o = 0; o < floatTimes.length; o ++){
                                     if(floatTimes[o] == saunaTime + 60){
-                                        saunas[i].innerHTML = "<div class='priority5'><h3 class='priorityTag'>Priority 5</h3></div>"
+                                        saunas[i].innerHTML = Priority(5)
                                     }
                                 }
                             }
@@ -568,25 +568,25 @@ function findBestMassage(massages, massageDuration) {
             if (noOverlap(getRoomNumber(massages[i].dataset.dropDescription), massageTime, massageTime + massageDuration)) {
                 //Priority 1 if nothing aligns
                 if (!valueInArray(massageTime - 60, saunaTimes) && !valueInArray(massageTime - 90, floatTimes) && !valueInArray(massageTime + massageDuration, saunaTimes) && !valueInArray(massageTime + massageDuration, floatTimes)) {
-                    massages[i].innerHTML = "<div class='priority1'><h3 class='priorityTag'>Priority 1</h3></div>"
+                    massages[i].innerHTML = Priority(1)
                 }
                 //Priority 2 if singular sauna or massage aligns
                 if (valueInArray(massageTime - 60, saunaTimes) || valueInArray(massageTime - 90, floatTimes) || valueInArray(massageTime + massageDuration, saunaTimes) || valueInArray(massageTime + massageDuration, floatTimes)) {
-                    massages[i].innerHTML = "<div class='priority2'><h3 class='priorityTag'>Priority 2</h3></div>"
+                    massages[i].innerHTML = Priority(2)
                 }
                 //Priority 3 if aligns with single cwp
                 for (let j = 0; j < massageDurations.length; j++) {
                     //massage > sauna > float
                     if (valueInArray(massageTime + massageDurations[j], saunaTimes) && valueInArray(massageTime + massageDurations[j] + 60, floatTimes)) {
-                        massages[i].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>"
+                        massages[i].innerHTML = Priority(3)
                     }
                     //sauna > massage > float
                     if (valueInArray(massageTime - 60, saunaTimes) && valueInArray(massageTime + massageDurations[j], floatTimes)) {
-                        massages[i].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>"
+                        massages[i].innerHTML = Priority(3)
                     }
                     //sauna > float > massage
                     if (valueInArray(massageTime - 150, saunaTimes) && valueInArray(massageTime - 90, floatTimes)) {
-                        massages[i].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>"
+                        massages[i].innerHTML = Priority(3)
                     }
                 }
                 //Priority 4 couples saunage or floatage aligns
@@ -597,7 +597,7 @@ function findBestMassage(massages, massageDuration) {
                             for (let l = 0; l < massageTimes.length; l++) {
                                 if (i != l) {
                                     if (massageTime == massageTimes[l]) {
-                                        massages[i].innerHTML = "<div class='priority4'><h3 class='priorityTag'>Priority 4</h3></div>"
+                                        massages[i].innerHTML = Priority(4)
                                     }
                                 }
                             }
@@ -607,7 +607,7 @@ function findBestMassage(massages, massageDuration) {
                             for (let l = 0; l < massageTimes.length; l++) {
                                 if (i != l) {
                                     if (massageTime == massageTimes[l]) {
-                                        massages[i].innerHTML = "<div class='priority4'><h3 class='priorityTag'>Priority 4</h3></div>"
+                                        massages[i].innerHTML = Priority(4)
                                     }
                                 }
                             }
@@ -619,7 +619,7 @@ function findBestMassage(massages, massageDuration) {
                             for (let l = 0; l < massageTimes.length; l++) {
                                 if (i != l) {
                                     if (massageTime == massageTimes[l]) {
-                                        massages[i].innerHTML = "<div class='priority4'><h3 class='priorityTag'>Priority 4</h3></div>"
+                                        massages[i].innerHTML = Priority(4)
                                     }
                                 }
                             }
@@ -629,7 +629,7 @@ function findBestMassage(massages, massageDuration) {
                             for (let l = 0; l < massageTimes.length; l++) {
                                 if (i != l) {
                                     if (massageTime == massageTimes[l]) {
-                                        massages[i].innerHTML = "<div class='priority4'><h3 class='priorityTag'>Priority 4</h3></div>"
+                                        massages[i].innerHTML = Priority(4)
                                     }
                                 }
                             }
@@ -647,7 +647,7 @@ function findBestMassage(massages, massageDuration) {
                                     if (massageTimes[l] == massageTime) {
                                         for (let o = 0; o < floatTimes.length; o++) {
                                             if (floatTimes[o] == massageTime + massageDurations[j] + 60) {
-                                                massages[i].innerHTML = "<div class='priority5'><h3 class='priorityTag'>Priority 5</h3></div>"
+                                                massages[i].innerHTML = Priority(5)
                                             }
                                         }
                                     }
@@ -663,7 +663,7 @@ function findBestMassage(massages, massageDuration) {
                                     if (massageTimes[k] == massageTime) {
                                         for (let o = 0; o < floatTimes.length; o++) {
                                             if (floatTimes[o] == massageTime + massageDurations[j]) {
-                                                massages[i].innerHTML = "<div class='priority5'><h3 class='priorityTag'>Priority 5</h3></div>"
+                                                massages[i].innerHTML = Priority(5)
                                             }
                                         }
                                     }
@@ -679,7 +679,7 @@ function findBestMassage(massages, massageDuration) {
                                     if (massageTimes[i] == massageTime) {
                                         for (let o = 0; o < floatTimes.length; o++) {
                                             if (floatTimes[o] == massageTime - 90) {
-                                                massages[i].innerHTML = "<div class='priority5'><h3 class='priorityTag'>Priority 5</h3></div>"
+                                                massages[i].innerHTML = Priority(5)
                                             }
                                         }
                                     }
@@ -691,7 +691,7 @@ function findBestMassage(massages, massageDuration) {
             }
         }
         else {
-            massages[i].innerHTML = "<div class='priority6'><h3 class='priorityTag'>Priority 6</h3></div>"
+            massages[i].innerHTML = Priority(6)
         }
     }
 }
@@ -703,24 +703,24 @@ function findBestFlauna(floats, saunas) {
         for(let j = 0; j < floatTimes.length; j ++){
             if(floatTimes[j] == saunaTime + 60){
                 for(let k = 0; k < massageDurations.length; k ++){
+                    //Priority 1 no massages before or after
+                    if(!valueInArray(saunaTime - massageDurations[k], massageTimes) && !valueInArray(saunaTime + 150, massageTimes)){
+                        saunas[i].innerHTML = Priority(1)
+                        floats[j].innerHTML = Priority(1)
+                    }
+                    //Priority 2 a massage before or after
+                    if(valueInArray(saunaTime - massageDurations[k], massageTimes) || valueInArray(saunaTime + 150, massageTimes)){
+                        saunas[i].innerHTML = Priority(2)
+                        floats[j].innerHTML = Priority(2)
+                    }
                     for(let l = 0; l < massageTimes.length; l ++){
                         if(noOverlap(getRoomNumber(massages[l].dataset.dropDescription), getAbsoluteTime(massages[l].dataset.dropDescription), getAbsoluteTime(massages[l].dataset.dropDescription) + massageDurations[k])){
-                            //Priority 1 no massages before or after
-                            if(!valueInArray(saunaTime - massageDurations[k], massageTimes) && !valueInArray(saunaTime + 150 + massageDurations[k], massageTimes)){
-                                saunas[i].innerHTML = "<div class='priority1'><h3 class='priorityTag'>Priority 1</h3></div>"
-                                floats[j].innerHTML = "<div class='priority1'><h3 class='priorityTag'>Priority 1</h3></div>"
-                            }
-                            //Priority 2 a massage before or after
-                            if(valueInArray(saunaTime - massageDurations[k], massageTimes) || valueInArray(saunaTime + 150, massageTimes)){
-                                saunas[i].innerHTML = "<div class='priority2'><h3 class='priorityTag'>Priority 2</h3></div>"
-                                floats[j].innerHTML = "<div class='priority2'><h3 class='priorityTag'>Priority 2</h3></div>"
-                            }
                             //Priority 3 couples massage before or after
                             for(let o = 0; o < massageTimes.length; o ++){
                                 if(k != o){
-                                    if(massageTimes[k] == massageTimes[o] && (valueInArray(saunaTime - massageDurations[k], massageTimes) || valueInArray(saunaTime + 150 + massageDurations[k], massageTimes))){
-                                        saunas[i].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>"
-                                        floats[j].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>"
+                                    if(massageTimes[k] == massageTimes[o] && (valueInArray(saunaTime - massageDurations[k], massageTimes) || valueInArray(saunaTime + 150, massageTimes))){
+                                        saunas[i].innerHTML = Priority(3)
+                                        floats[j].innerHTML = Priority(3)
                                     }
                                 }
                             }
@@ -930,4 +930,7 @@ function noOverlap(roomNumber, massageStart, massageEnd){
         }
     }
     return true;
+}
+function Priority(num){
+    return ''.concat('<div class=priority', num, '><h3 class="priorityTag">Priority', num, '</h3></div>')
 }
