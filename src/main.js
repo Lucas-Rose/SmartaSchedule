@@ -98,7 +98,7 @@ floatage45Item.classList.add("gridItem")
 let floatage45Text = floatage45Item.appendChild(document.createElement("h3"))
 floatage45Text.id = "floatage45Text"
 floatage45Text.classList.add("toolElement")
-floatage45Text.innerText = "Single Floatage (45)"
+floatage45Text.innerText = "Floatage (45)"
 
 //Floatage 60
 let floatage60Item = gridContainer.appendChild(document.createElement("div"))
@@ -108,7 +108,7 @@ floatage60Item.classList.add("gridItem")
 let floatage60Text = floatage60Item.appendChild(document.createElement("h3"))
 floatage60Text.id = "floatage60Text"
 floatage60Text.classList.add("toolElement")
-floatage60Text.innerText = "Single Floatage (60)"
+floatage60Text.innerText = "Floatage (60)"
 
 //Floatage 90
 let floatage90Item = gridContainer.appendChild(document.createElement("div"))
@@ -118,7 +118,7 @@ floatage90Item.classList.add("gridItem")
 let floatage90Text = floatage90Item.appendChild(document.createElement("h3"))
 floatage90Text.id = "floatage90Text"
 floatage90Text.classList.add("toolElement")
-floatage90Text.innerText = "Single Floatage (90)"
+floatage90Text.innerText = "Floatage (90)"
 
 //Saunage 45
 let saunage45Item = gridContainer.appendChild(document.createElement("div"))
@@ -205,9 +205,11 @@ let floats = null;
 let floatTimes = []
 let saunas = null;
 let saunaTimes = []
+let activeMassages = [];
 let massages = null;
 let massageTimes = []
 let linesDrawn = [];
+let massageDurations = [60, 75, 105]
 
 addEventListener("keypress", (event) => {
     if (event.code == 'BracketLeft' && !toolActive) {
@@ -261,7 +263,7 @@ addEventListener("click", (event) => {
         findBestMassage(massages, 75)
         deactivateTool();
     }
-    if (event.target.id == "mass90Item" || event.target.id == "mass60Text") {
+    if (event.target.id == "mass90Item" || event.target.id == "mass90Text") {
         findBestMassage(massages, 105)
         deactivateTool();
     }
@@ -312,6 +314,17 @@ function getBookings() {
             i--;
         }
     }
+    activeMassages = document.getElementsByClassName("NotAvailable")
+    activeMassages = Array.from(activeMassages)
+    for(let i = 0; i < activeMassages.length; i ++){
+        if(activeMassages[i].dataset.dropDescription.includes("Massage")){
+            continue;
+        }
+        else{
+            activeMassages.splice(i, 1);
+            i--;
+        }
+    }
 }
 
 function getFloats(bookings) {
@@ -351,128 +364,338 @@ function getMassages(bookings) {
 }
 
 function findBestFloat(floats) {
-    //Priority 1
     for (let i = 0; i < floats.length; i++) {
         let floatTime = getAbsoluteTime(floats[i].dataset.dropDescription)
-        //Don't color in if anything perfectly falls before it (or a massage after)
-        if (valueInArray(floatTime - 60, saunaTimes)) {
-            continue;
+        //Priority 1 if nothing aligns
+        if (!valueInArray(floatTime - 60, saunaTimes) && !valueInArray(floatTime - 60, massageTimes) && !valueInArray(floatTime - 75, massageTimes) && !valueInArray(floatTime - 105, massageTimes) && !valueInArray(floatTime + 90, massageTimes)) {
+            floats[i].innerHTML = "<div class='priority1'><h3 class='priorityTag'>Priority 1</h3></div>"
         }
-        if (valueInArray(floatTime - 60, massageTimes) || valueInArray(floatTime - 75, massageTimes) || valueInArray(floatTime - 105, massageTimes) || valueInArray(floatTime + 90, massageTimes)) {
-            continue;
-        }
-        floats[i].innerHTML = "<div class='priority1'><h3 class='priorityTag'>Priority 1</h3></div>"
-    }
-
-
-    //Priority 2
-    for (let i = 0; i < floats.length; i++) {
-        let floatTime = getAbsoluteTime(floats[i].dataset.dropDescription)
-        if (!floats[i].innerHTML.includes("Priority")) {
-            //Disregarding massage > sauna > float
-            if (valueInArray(floatTime - 60, saunaTimes) && ((valueInArray(floatTime - 120, massageTimes) || valueInArray(floatTime - 135, massageTimes) || valueInArray(floatTime - 165, massageTimes)))) {
-                continue;
-            }
-            //Disregarding sauna > massage > float
-            if ((valueInArray(floatTime - 60, massageTimes) && valueInArray(floatTime - 120, saunaTimes)) || (valueInArray(floatTime - 75, massageTimes) && valueInArray(floatTime - 135, saunaTimes)) ||
-                (valueInArray(floatTime - 105, massageTimes) && valueInArray(floatTime - 165, saunaTimes))) {
-                continue;
-            }
+        //Priority 2 if singular sauna or massage aligns
+        if (valueInArray(floatTime - 60, saunaTimes) || valueInArray(floatTime - 60, massageTimes) || valueInArray(floatTime - 75, massageTimes) || valueInArray(floatTime - 105, massageTimes) || valueInArray(floatTime + 90, massageTimes)) {
             floats[i].innerHTML = "<div class='priority2'><h3 class='priorityTag'>Priority 2</h3></div>"
         }
-    }
 
-    //Priority 3 -> Still needs work to promote CCWP
-    for (let i = 0; i < floats.length; i++) {
-        if (!floats[i].innerHTML.includes("Priority")) {
-            floats[i].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>"
+        //Priority 3 if aligns with single cwp
+        for(let j = 0; j < massageDurations.length; j ++){
+            //massage > sauna > float
+            if(valueInArray(floatTime - 60 - massageDurations[j], massageTimes) && valueInArray(floatTime - 60, saunaTimes)){
+                floats[i].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>"
+            }
+            //sauna > massage > float
+            if(valueInArray(floatTime - massageDurations[j] - 60, saunaTimes) && valueInArray(floatTime - massageDurations[j], massageTimes)){
+                floats[i].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>"
+            }
+            //sauna > float > massage
+            if(valueInArray(floatTime - 60, saunaTimes) && valueInArray(floatTime + 90, massageTimes)){
+                floats[i].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>"
+            }
+        }
+
+        //Priority 4 couples floatage aligns
+        for(let j = 0; j < massageDurations.length; j ++){
+            for(let k = 0; k < massageTimes.length; k ++){
+                if(floatTime - massageDurations[j] == massageTimes[k]){
+                    for(let l = 0; l < massageTimes.length; l++){
+                        if(k != l){
+                            if(massageTimes[k] == massageTimes[l]){
+                                floats[i].innerHTML = "<div class='priority4'><h3 class='priorityTag'>Priority 4</h3></div>"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for (let j = 0; j < massageTimes.length; j++) {
+            if (floatTime + 90 == massageTimes[j]) {
+                for (let k = 0; k < massageTimes.length; k++) {
+                    if (j != k) {
+                        if (massageTimes[k] == massageTimes[j]) {
+                            floats[i].innerHTML = "<div class='priority4'><h3 class='priorityTag'>Priority 4</h3></div>"
+                        }
+                    }
+                }
+            }
+        }
+
+        //Priority 5 ccwp aligns
+        for(let j = 0; j < massageDurations.length; j ++){
+            for(let k = 0; k < massageTimes.length; k ++){
+                if(floatTime - massageDurations[j] == massageTimes[k]){
+                    for(let l = 0; l < massageTimes.length; l++){
+                        if(k != l){
+                            if(massageTimes[k] == massageTimes[l]){
+                                for(let o = 0; o < saunaTimes.length; o ++){
+                                    if(saunaTimes[o] == floatTime - massageDurations[j] - 60){
+                                        floats[i].innerHTML = "<div class='priority5'><h3 class='priorityTag'>Priority 5</h3></div>"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for (let j = 0; j < massageTimes.length; j++) {
+            if (floatTime + 90 == massageTimes[j]) {
+                for (let k = 0; k < massageTimes.length; k++) {
+                    if (j != k) {
+                        if (massageTimes[k] == massageTimes[j]) {
+                            for(let l = 0; l < saunaTimes.length; l++){
+                                if(saunaTimes[l] == floatTime - 60){
+                                    floats[i].innerHTML = "<div class='priority5'><h3 class='priorityTag'>Priority 5</h3></div>"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
+
 function findBestSauna(saunas) {
     for (let i = 0; i < saunas.length; i++) {
         let saunaTime = getAbsoluteTime(saunas[i].dataset.dropDescription)
-        if (valueInArray(saunaTime + 60, floatTimes)) {
-            continue;
+        //Priority 1 if nothing aligns
+        if (!valueInArray(saunaTime - 60, massageTimes) && !valueInArray(saunaTime - 75, massageTimes) && !valueInArray(saunaTime - 105, massageTimes) && !valueInArray(saunaTime + 60, floatTimes) && !valueInArray(saunaTime + 60, massageTimes)) {
+            saunas[i].innerHTML = "<div class='priority1'><h3 class='priorityTag'>Priority 1</h3></div>"
         }
-        if (valueInArray(saunaTime - 60, massageTimes) || valueInArray(saunaTime - 75, massageTimes) || valueInArray(saunaTime - 105, massageTimes) || valueInArray(saunaTime + 60, massageTimes)) {
-            continue;
+        //Priority 2 if singular sauna or massage aligns
+        if (valueInArray(saunaTime - 60, massageTimes) || valueInArray(saunaTime - 75, massageTimes) || valueInArray(saunaTime - 105, massageTimes) || valueInArray(saunaTime + 60, floatTimes) || valueInArray(saunaTime + 60, massageTimes)) {
+            saunas[i].innerHTML = "<div class='priority2'><h3 class='priorityTag'>Priority 2</h3></div>"
         }
-        saunas[i].innerHTML = "<div class='priority1'><h3 class='priorityTag'>Priority 1</h3></div>";
-    }
 
-    for (let i = 0; i < saunas.length; i++) {
-        let saunaTime = getAbsoluteTime(saunas[i].dataset.dropDescription)
-        if (!saunas[i].innerHTML.includes("Priority")) {
+        //Priority 3 if aligns with single cwp
+        for(let j = 0; j < massageDurations.length; j ++){
             //massage > sauna > float
-            if (valueInArray(saunaTime + 60, floatTimes) && (valueInArray(saunaTime - 60, massageTimes) || valueInArray(saunaTime - 75, massageTimes) || valueInArray(saunaTime - 105, massageTimes))) {
-                continue;
+            if(valueInArray(saunaTime - massageDurations[j], massageTimes) && valueInArray(saunaTime + 60, floatTimes)){
+                saunas[i].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>"
             }
             //sauna > massage > float
-            if (valueInArray(saunaTime + 60, massageTimes) && (valueInArray(saunaTime + 120, floatTimes) || valueInArray(saunaTime + 135, floatTimes) || valueInArray(saunaTime + 165, floatTimes))) {
-                continue;
+            if(valueInArray(saunaTime + 60, massageTimes) && valueInArray(saunaTime + 60 + massageDurations[j], floatTimes)){
+                saunas[i].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>"
             }
-            saunas[i].innerHTML = "<div class='priority2'><h3 class='priorityTag'>Priority 2</h3></div>";
+            //sauna > float > massage
+            if(valueInArray(saunaTime + 60, floatTimes) && valueInArray(saunaTime + 150, massageTimes)){
+                saunas[i].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>"
+            }
         }
-    }
-    for (let i = 0; i < saunas.length; i++) {
-        if (!saunas[i].innerHTML.includes("Priority")) {
-            saunas[i].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>";
+
+        //Priority 4 couples saunage aligns
+        for(let j = 0; j < massageDurations.length; j ++){
+            for(let k = 0; k < massageTimes.length; k ++){
+                if(saunaTime - massageDurations[j] == massageTimes[k]){
+                    for(let l = 0; l < massageTimes.length; l++){
+                        if(k != l){
+                            if(massageTimes[k] == massageTimes[l]){
+                                saunas[i].innerHTML = "<div class='priority4'><h3 class='priorityTag'>Priority 4</h3></div>"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for (let j = 0; j < massageTimes.length; j++) {
+            if (saunaTime + 60 == massageTimes[j]) {
+                for (let k = 0; k < massageTimes.length; k++) {
+                    if (j != k) {
+                        if (massageTimes[k] == massageTimes[j]) {
+                            saunas[i].innerHTML = "<div class='priority4'><h3 class='priorityTag'>Priority 4</h3></div>"
+                        }
+                    }
+                }
+            }
+        }
+
+        //Priority 5 ccwp aligns
+        for(let j = 0; j < massageDurations.length; j ++){
+            //massage > sauna > float
+            for(let k = 0; k < massageTimes.length; k ++){
+                if(saunaTime - massageDurations[j] == massageTimes[k]){
+                    for(let l = 0; l < massageTimes.length; l++){
+                        if(k != l){
+                            if(massageTimes[k] == massageTimes[l]){
+                                for(let o = 0; o < floatTimes.length; o ++){
+                                    if(floatTimes[o] == saunaTime + 60){
+                                        saunas[i].innerHTML = "<div class='priority5'><h3 class='priorityTag'>Priority 5</h3></div>"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            //sauna > massage > float
+            for(let k = 0; k < massageTimes.length; k ++){
+                if(saunaTime + 60 == massageTimes[k]){
+                    for(let l = 0; l < massageTimes.length; l++){
+                        if(k != l){
+                            if(massageTimes[k] == massageTimes[l]){
+                                for(let o = 0; o < floatTimes.length; o ++){
+                                    if(floatTimes[o] == saunaTime + 60 + massageDurations[j]){
+                                        saunas[i].innerHTML = "<div class='priority5'><h3 class='priorityTag'>Priority 5</h3></div>"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            //sauna > float > massage
+            for(let k = 0; k < massageTimes.length; k ++){
+                if(saunaTime + 150 == massageTimes[k]){
+                    for(let l = 0; l < massageTimes.length; l++){
+                        if(k != l){
+                            if(massageTimes[k] == massageTimes[l]){
+                                for(let o = 0; o < floatTimes.length; o ++){
+                                    if(floatTimes[o] == saunaTime + 60){
+                                        saunas[i].innerHTML = "<div class='priority5'><h3 class='priorityTag'>Priority 5</h3></div>"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
 
-function findBestMassage(massages, massageDuration){
-
-    //Priority 1
-    for(let i = 0; i < massages.length; i ++){
-        let massageTime = getAbsoluteTime(massages[i].dataset.dropDescription)
-        //sauna > massage > float
-        if(valueInArray(massageTime - 60, saunaTimes) || valueInArray(massageTime + massageDuration, floatTimes)){
-            continue;
-        }
-        //massage > sauna > float
-        if(valueInArray(massageTime + massageDuration, saunaTimes) || valueInArray(massageTime + massageDuration + 60, floatTimes)){
-            continue;
-        }
-        //sauna > massage > float
-        if(valueInArray(massageTime - 150, saunaTimes) || valueInArray(massageTime - 90, floatTimes)){
-            continue;
-        }
-        if(massageTime % 60 != 0){
-            continue;
-        }
-        massages[i].innerHTML = "<div class='priority1'><h3 class='priorityTag'>Priority 1</h3></div>";
-    }
-
-    //Priority 2
+function findBestMassage(massages, massageDuration) {
     for (let i = 0; i < massages.length; i++) {
         let massageTime = getAbsoluteTime(massages[i].dataset.dropDescription)
-        if (!massages[i].innerHTML.includes("Priority")) {
-            //sauna > massage > float
-            if (valueInArray(massageTime - 60, saunaTimes) && valueInArray(massageTime + massageDuration, floatTimes)){
-                continue;
+        if (massageTime % 60 == 0 || massageTime % 30 == 0) {
+            if (noOverlap(getRoomNumber(massages[i].dataset.dropDescription), massageTime, massageTime + massageDuration)) {
+                //Priority 1 if nothing aligns
+                if (!valueInArray(massageTime - 60, saunaTimes) && !valueInArray(massageTime - 90, floatTimes) && !valueInArray(massageTime + massageDuration, saunaTimes) && !valueInArray(massageTime + massageDuration, floatTimes)) {
+                    massages[i].innerHTML = "<div class='priority1'><h3 class='priorityTag'>Priority 1</h3></div>"
+                }
+                //Priority 2 if singular sauna or massage aligns
+                if (valueInArray(massageTime - 60, saunaTimes) || valueInArray(massageTime - 90, floatTimes) || valueInArray(massageTime + massageDuration, saunaTimes) || valueInArray(massageTime + massageDuration, floatTimes)) {
+                    massages[i].innerHTML = "<div class='priority2'><h3 class='priorityTag'>Priority 2</h3></div>"
+                }
+                //Priority 3 if aligns with single cwp
+                for (let j = 0; j < massageDurations.length; j++) {
+                    //massage > sauna > float
+                    if (valueInArray(massageTime + massageDurations[j], saunaTimes) && valueInArray(massageTime + massageDurations[j] + 60, floatTimes)) {
+                        massages[i].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>"
+                    }
+                    //sauna > massage > float
+                    if (valueInArray(massageTime - 60, saunaTimes) && valueInArray(massageTime + massageDurations[j], floatTimes)) {
+                        massages[i].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>"
+                    }
+                    //sauna > float > massage
+                    if (valueInArray(massageTime - 150, saunaTimes) && valueInArray(massageTime - 90, floatTimes)) {
+                        massages[i].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>"
+                    }
+                }
+                //Priority 4 couples saunage or floatage aligns
+                for (let j = 0; j < massageDurations.length; j++) {
+                    for (let k = 0; k < saunaTimes.length; k++) {
+                        //sauna > massage
+                        if (saunaTimes[k] == massageTime - 60) {
+                            for (let l = 0; l < massageTimes.length; l++) {
+                                if (i != l) {
+                                    if (massageTime == massageTimes[l]) {
+                                        massages[i].innerHTML = "<div class='priority4'><h3 class='priorityTag'>Priority 4</h3></div>"
+                                    }
+                                }
+                            }
+                        }
+                        //massage > sauna
+                        if (saunaTimes[k] == massageTime + massageDurations[j]) {
+                            for (let l = 0; l < massageTimes.length; l++) {
+                                if (i != l) {
+                                    if (massageTime == massageTimes[l]) {
+                                        massages[i].innerHTML = "<div class='priority4'><h3 class='priorityTag'>Priority 4</h3></div>"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    for (let k = 0; k < floatTimes.length; k++) {
+                        //float > massage
+                        if (floatTimes[k] == massageTime - 90) {
+                            for (let l = 0; l < massageTimes.length; l++) {
+                                if (i != l) {
+                                    if (massageTime == massageTimes[l]) {
+                                        massages[i].innerHTML = "<div class='priority4'><h3 class='priorityTag'>Priority 4</h3></div>"
+                                    }
+                                }
+                            }
+                        }
+                        //massage > float
+                        if (floatTimes[k] == massageTime + massageDurations[j]) {
+                            for (let l = 0; l < massageTimes.length; l++) {
+                                if (i != l) {
+                                    if (massageTime == massageTimes[l]) {
+                                        massages[i].innerHTML = "<div class='priority4'><h3 class='priorityTag'>Priority 4</h3></div>"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                //Priority 5 ccwp aligns
+                for (let j = 0; j < massageDurations.length; j++) {
+
+                    //massage > sauna > float
+                    for (let k = 0; k < saunaTimes.length; k++) {
+                        if (massageTime + massageDurations[j] == saunaTimes[k]) {
+                            for (let l = 0; l < massageTimes.length; l++) {
+                                if (i != l) {
+                                    if (massageTimes[l] == massageTime) {
+                                        for (let o = 0; o < floatTimes.length; o++) {
+                                            if (floatTimes[o] == massageTime + massageDurations[j] + 60) {
+                                                massages[i].innerHTML = "<div class='priority5'><h3 class='priorityTag'>Priority 5</h3></div>"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    //sauna > massage > float
+                    for (let k = 0; k < saunaTimes.length; k++) {
+                        if (massageTime - 60 == saunaTimes[k]) {
+                            for (let l = 0; l < massageTimes.length; l++) {
+                                if (i != l) {
+                                    if (massageTimes[k] == massageTime) {
+                                        for (let o = 0; o < floatTimes.length; o++) {
+                                            if (floatTimes[o] == massageTime + massageDurations[j]) {
+                                                massages[i].innerHTML = "<div class='priority5'><h3 class='priorityTag'>Priority 5</h3></div>"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    //sauna > float > massage
+                    for (let k = 0; k < saunaTimes.length; k++) {
+                        if (massageTime - 150 == saunaTimes[k]) {
+                            for (let l = 0; l < massageTimes.length; l++) {
+                                if (i != l) {
+                                    if (massageTimes[i] == massageTime) {
+                                        for (let o = 0; o < floatTimes.length; o++) {
+                                            if (floatTimes[o] == massageTime - 90) {
+                                                massages[i].innerHTML = "<div class='priority5'><h3 class='priorityTag'>Priority 5</h3></div>"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
-            //massage > sauna > float
-            if(valueInArray(massageTime + massageDuration, saunaTimes) && valueInArray(massageTime + massageDuration + 60, floatTimes)){
-                continue;
-            }
-            //sauna > massage > float
-            if(valueInArray(massageTime - 150, saunaTimes) && valueInArray(massageTime - 90, floatTimes)){
-                continue;
-            }
-            if(massageTime % 60 != 0){
-                continue;
-            }
-            massages[i].innerHTML = "<div class='priority2'><h3 class='priorityTag'>Priority 2</h3></div>";
         }
-    }
-    for (let i = 0; i < massages.length; i++) {
-        if (!massages[i].innerHTML.includes("Priority")) {
-            massages[i].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>";
+        else {
+            massages[i].innerHTML = "<div class='priority6'><h3 class='priorityTag'>Priority 6</h3></div>"
         }
     }
 }
+
 
 function findBestFlauna(floats, saunas) {
     canvas.style.visibility = "visible";
@@ -693,4 +916,26 @@ function valueInArray(target, arr) {
         }
     }
     return false;
+}
+
+function getRoomNumber(description){
+    description = description.split(" ")
+    if(description.length == 8){
+        return description[5]
+    }
+    if(description.length == 5)
+    {
+        return description[2]
+    }
+}
+
+function noOverlap(roomNumber, massageStart, massageEnd){
+    for(let i = 0; i < activeMassages.length; i ++){
+        if(getRoomNumber(activeMassages[i].dataset.dropDescription) == roomNumber){
+            if(massageStart < getAbsoluteTime(activeMassages[i].dataset.dropDescription) && massageEnd > getAbsoluteTime(activeMassages[i].dataset.dropDescription)){
+                return false;
+            }
+        }
+    }
+    return true;
 }
