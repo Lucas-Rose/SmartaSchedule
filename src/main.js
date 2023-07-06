@@ -698,45 +698,37 @@ function findBestMassage(massages, massageDuration) {
 
 
 function findBestFlauna(floats, saunas) {
-    canvas.style.visibility = "visible";
-    for (let i = 0; i < saunas.length; i++) {
-        let saunaTime = getAbsoluteTime(saunas[i].dataset.dropDescription);
-        for (let j = 0; j < floatTimes.length; j++) {
-            if (valueInArray(saunaTime - 60, massageTimes) || valueInArray(saunaTime - 75, massageTimes) || valueInArray(saunaTime - 105, massageTimes)) {
-                continue;
-            }
-            if (floatTimes[j] == saunaTime + 60) {
-                saunas[i].innerHTML = "<div class='priority1'><h3 class='priorityTag'>Priority 1</h3></div>";
-                floats[j].innerHTML = "<div class='priority1'><h3 class='priorityTag'>Priority 1</h3></div>";
-
-                // Start a new Path
-                ctx.beginPath();
-                ctx.moveTo(saunas[i].getBoundingClientRect().left + (saunas[i].offsetWidth / 2) + window.scrollX, saunas[i].getBoundingClientRect().top + (saunas[i].offsetHeight / 4) + window.scrollY);
-                ctx.lineTo(floats[j].getBoundingClientRect().left + (floats[j].offsetWidth / 2) + window.scrollX, floats[j].getBoundingClientRect().top + (floats[j].offsetHeight / 4) + window.scrollY);
-
-                // Draw the Path
-                ctx.stroke();
-            }
-        }
-    }
     for (let i = 0; i < saunas.length; i++) {
         let saunaTime = getAbsoluteTime(saunas[i].dataset.dropDescription)
-        for (let j = 0; j < floatTimes.length; j++) {
-            if (!saunas[i].innerHTML.includes("Priority")) {
-                if (floatTimes[j] == saunaTime + 60) {
-                    saunas[i].innerHTML = "<div class='priority2'><h3 class='priorityTag'>Priority 2</h3></div>";
-                    floats[j].innerHTML = "<div class='priority2'><h3 class='priorityTag'>Priority 2</h3></div>";
-
-                    // Start a new Path
-                    ctx.beginPath();
-                    ctx.moveTo(saunas[i].getBoundingClientRect().left + (saunas[i].offsetWidth / 2) + window.scrollX, saunas[i].getBoundingClientRect().top + (saunas[i].offsetHeight / 4) + window.scrollY);
-                    ctx.lineTo(floats[j].getBoundingClientRect().left + (floats[j].offsetWidth / 2) + window.scrollX, floats[j].getBoundingClientRect().top + (floats[j].offsetHeight / 4) + window.scrollY);
-
-                    // Draw the Path
-                    ctx.stroke();
+        for(let j = 0; j < floatTimes.length; j ++){
+            if(floatTimes[j] == saunaTime + 60){
+                for(let k = 0; k < massageDurations.length; k ++){
+                    for(let l = 0; l < massageTimes.length; l ++){
+                        if(noOverlap(getRoomNumber(massages[l].dataset.dropDescription), getAbsoluteTime(massages[l].dataset.dropDescription), getAbsoluteTime(massages[l].dataset.dropDescription) + massageDurations[k])){
+                            //Priority 1 no massages before or after
+                            if(!valueInArray(saunaTime - massageDurations[k], massageTimes) && !valueInArray(saunaTime + 150 + massageDurations[k], massageTimes)){
+                                saunas[i].innerHTML = "<div class='priority1'><h3 class='priorityTag'>Priority 1</h3></div>"
+                                floats[j].innerHTML = "<div class='priority1'><h3 class='priorityTag'>Priority 1</h3></div>"
+                            }
+                            //Priority 2 a massage before or after
+                            if(valueInArray(saunaTime - massageDurations[k], massageTimes) || valueInArray(saunaTime + 150, massageTimes)){
+                                saunas[i].innerHTML = "<div class='priority2'><h3 class='priorityTag'>Priority 2</h3></div>"
+                                floats[j].innerHTML = "<div class='priority2'><h3 class='priorityTag'>Priority 2</h3></div>"
+                            }
+                            //Priority 3 couples massage before or after
+                            for(let o = 0; o < massageTimes.length; o ++){
+                                if(k != o){
+                                    if(massageTimes[k] == massageTimes[o] && (valueInArray(saunaTime - massageDurations[k], massageTimes) || valueInArray(saunaTime + 150 + massageDurations[k], massageTimes))){
+                                        saunas[i].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>"
+                                        floats[j].innerHTML = "<div class='priority3'><h3 class='priorityTag'>Priority 3</h3></div>"
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
-        }
+        }   
     }
 }
 
