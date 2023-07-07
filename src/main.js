@@ -385,6 +385,18 @@ addEventListener("click", (event) => {
         findBestCWP(floats, saunas, massages, 105)
         deactivateTool();
     }
+    if (event.target.id == "ccwp45Item" || event.target.id == "ccwp45Text") {
+        findBestCCWP(floats, saunas, massages, 60)
+        deactivateTool();
+    }
+    if (event.target.id == "ccwp60Item" || event.target.id == "ccwp60Text") {
+        findBestCCWP(floats, saunas, massages, 75)
+        deactivateTool();
+    }
+    if (event.target.id == "ccwp90Item" || event.target.id == "ccwp90Text") {
+        findBestCCWP(floats, saunas, massages, 105)
+        deactivateTool();
+    }
 })
 
 function activateTool() {
@@ -1279,16 +1291,16 @@ function findBestCouplesSaunage(saunas, massages, massageDuration){
                 //sauna > massage > float
                 if(massageTimes[j] == saunaTime + 60){
                     if(valueInArrayExcluding(massageTimes[j], massageTimes, j) && !valueInArray(saunaTime + 60 + massageDuration, floatTimes)){
-                        if(floats[i].dataset.priority != null && floats[i].dataset.priority <= 1){
-                            floats[i].innerHTML = Priority(1)
+                        if(saunas[i].dataset.priority != null && saunas[i].dataset.priority <= 1){
+                            saunas[i].innerHTML = Priority(1)
                             massages[j].innerHTML = Priority(1)
-                            floats[i].dataset.priority = 1;
+                            saunas[i].dataset.priority = 1;
                             massages[j].dataset.priority = 1;
                         }
-                        if(floats[i].dataset.priority == null){
-                            floats[i].innerHTML = Priority(1)
+                        if(saunas[i].dataset.priority == null){
+                            saunas[i].innerHTML = Priority(1)
                             massages[j].innerHTML = Priority(1)
-                            floats[i].dataset.priority = 1;
+                            saunas[i].dataset.priority = 1;
                             massages[j].dataset.priority = 1;
                         }
                     }
@@ -1297,16 +1309,16 @@ function findBestCouplesSaunage(saunas, massages, massageDuration){
                 //massage > sauna > float
                 if(massageTimes[j] == saunaTime - massageDuration){
                     if(valueInArrayExcluding(massageTimes[j], massageTimes, j) && !valueInArray(saunaTime + 60, floatTimes)){
-                        if(floats[i].dataset.priority != null && floats[i].dataset.priority <= 1){
-                            floats[i].innerHTML = Priority(1)
+                        if(saunas[i].dataset.priority != null && saunas[i].dataset.priority <= 1){
+                            saunas[i].innerHTML = Priority(1)
                             massages[j].innerHTML = Priority(1)
-                            floats[i].dataset.priority = 1;
+                            saunas[i].dataset.priority = 1;
                             massages[j].dataset.priority = 1;
                         }
-                        if(floats[i].dataset.priority == null){
-                            floats[i].innerHTML = Priority(1)
+                        if(saunas[i].dataset.priority == null){
+                            saunas[i].innerHTML = Priority(1)
                             massages[j].innerHTML = Priority(1)
-                            floats[i].dataset.priority = 1;
+                            saunas[i].dataset.priority = 1;
                             massages[j].dataset.priority = 1;
                         }
                     }
@@ -1316,16 +1328,16 @@ function findBestCouplesSaunage(saunas, massages, massageDuration){
                 //sauna > massage > float
                 if(massageTimes[j] == saunaTime + 60){
                     if(valueInArrayExcluding(massageTimes[j], massageTimes, j) && valueInArray(saunaTime + 60 + massageDuration, floatTimes)){
-                        if(floats[i].dataset.priority != null && floats[i].dataset.priority <= 1){
-                            floats[i].innerHTML = Priority(2)
+                        if(saunas[i].dataset.priority != null && saunas[i].dataset.priority <= 2){
+                            saunas[i].innerHTML = Priority(2)
                             massages[j].innerHTML = Priority(2)
-                            floats[i].dataset.priority = 2;
+                            saunas[i].dataset.priority = 2;
                             massages[j].dataset.priority = 2;
                         }
-                        if(floats[i].dataset.priority == null){
-                            floats[i].innerHTML = Priority(2)
+                        if(saunas[i].dataset.priority == null){
+                            saunas[i].innerHTML = Priority(2)
                             massages[j].innerHTML = Priority(2)
-                            floats[i].dataset.priority = 2;
+                            saunas[i].dataset.priority = 2;
                             massages[j].dataset.priority = 2;
                         }
                     }
@@ -1334,16 +1346,16 @@ function findBestCouplesSaunage(saunas, massages, massageDuration){
                 //massage > sauna > float
                 if(massageTimes[j] == saunaTime - massageDuration){
                     if(valueInArrayExcluding(massageTimes[j], massageTimes, j) && valueInArray(saunaTime + 60, floatTimes)){
-                        if(floats[i].dataset.priority != null && floats[i].dataset.priority <= 1){
-                            floats[i].innerHTML = Priority(2)
+                        if(saunas[i].dataset.priority != null && saunas[i].dataset.priority <= 2){
+                            saunas[i].innerHTML = Priority(2)
                             massages[j].innerHTML = Priority(2)
-                            floats[i].dataset.priority = 2;
+                            saunas[i].dataset.priority = 2;
                             massages[j].dataset.priority = 2;
                         }
-                        if(floats[i].dataset.priority == null){
-                            floats[i].innerHTML = Priority(2)
+                        if(saunas[i].dataset.priority == null){
+                            saunas[i].innerHTML = Priority(2)
                             massages[j].innerHTML = Priority(2)
-                            floats[i].dataset.priority = 2;
+                            saunas[i].dataset.priority = 2;
                             massages[j].dataset.priority = 2;
                         }
                     }
@@ -1354,7 +1366,243 @@ function findBestCouplesSaunage(saunas, massages, massageDuration){
 }
 
 function findBestCWP(floats, saunas, massages, massageDuration) {
-    
+    for(let i = 0; i < floats.length; i ++){
+        let floatTime = getAbsoluteTime(floats[i].dataset.dropDescription)
+        for(let j = 0; j < saunaTimes.length; j ++){
+            
+            //Priority 1 no additional massage
+            //sauna > float > massage
+            if(saunaTimes[j] == floatTime - 60){
+                for(let k = 0; k < massageTimes.length; k ++){
+                    if(noOverlap(getRoomNumber(massages[k].dataset.dropDescription), massageTimes[k], massageTimes[k] + massageDuration)){
+                        if(massageTimes[k] == floatTime + 90){
+                            if(!valueInArrayExcluding(massageTimes[k], massageTimes, k)){
+                                if(floats[i].dataset.priority != null && floats[i].dataset.priority <= 1){
+                                    floats[i].innerHTML = Priority(1)
+                                    saunas[j].innerHTML = Priority(1)
+                                    massages[k].innerHTML = Priority(1)
+                                    floats[i].dataset.priority = 1;
+                                    saunas[j].dataset.priority = 1;
+                                    massages[k].dataset.priority = 1;
+                                }
+                                if(saunas[i].dataset.priority == null){
+                                    floats[i].innerHTML = Priority(1)
+                                    saunas[j].innerHTML = Priority(1)
+                                    massages[k].innerHTML = Priority(1)
+                                    floats[i].dataset.priority = 1;
+                                    saunas[j].dataset.priority = 1;
+                                    massages[k].dataset.priority = 1;
+                                }
+                            }
+                            //Priority 2 additional massage
+                            else{
+                                if(floats[i].dataset.priority != null && floats[i].dataset.priority <= 2){
+                                    floats[i].innerHTML = Priority(2)
+                                    saunas[j].innerHTML = Priority(2)
+                                    massages[k].innerHTML = Priority(2)
+                                    floats[i].dataset.priority = 2;
+                                    saunas[j].dataset.priority = 2;
+                                    massages[k].dataset.priority = 2;
+                                }
+                                if(floats[i].dataset.priority == null){
+                                    floats[i].innerHTML = Priority(2)
+                                    saunas[j].innerHTML = Priority(2)
+                                    massages[k].innerHTML = Priority(2)
+                                    floats[i].dataset.priority = 2;
+                                    saunas[j].dataset.priority = 2;
+                                    massages[k].dataset.priority = 2;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            //Priority 1 no additional massage
+            //sauna > massage > float
+            if(saunaTimes[j] == floatTime - massageDuration - 60){
+                for(let k = 0; k < massageTimes.length; k ++){
+                    if(noOverlap(getRoomNumber(massages[k].dataset.dropDescription), massageTimes[k], massageTimes[k] + massageDuration)){
+                        if(massageTimes[k] == floatTime - massageDuration){
+                            if(!valueInArrayExcluding(massageTimes[k], massageTimes, k)){
+                                if(floats[i].dataset.priority != null && floats[i].dataset.priority <= 1){
+                                    floats[i].innerHTML = Priority(1)
+                                    saunas[j].innerHTML = Priority(1)
+                                    massages[k].innerHTML = Priority(1)
+                                    floats[i].dataset.priority = 1;
+                                    saunas[j].dataset.priority = 1;
+                                    massages[k].dataset.priority = 1;
+                                }
+                                if(floats[i].dataset.priority == null){
+                                    floats[i].innerHTML = Priority(1)
+                                    saunas[j].innerHTML = Priority(1)
+                                    massages[k].innerHTML = Priority(1)
+                                    floats[i].dataset.priority = 1;
+                                    saunas[j].dataset.priority = 1;
+                                    massages[k].dataset.priority = 1;
+                                }
+                            }
+                            //Priority 2 additional massage
+                            else{
+                                if(floats[i].dataset.priority != null && floats[i].dataset.priority <= 2){
+                                    floats[i].innerHTML = Priority(2)
+                                    saunas[j].innerHTML = Priority(2)
+                                    massages[k].innerHTML = Priority(2)
+                                    floats[i].dataset.priority = 2;
+                                    saunas[j].dataset.priority = 2;
+                                    massages[k].dataset.priority = 2;
+                                }
+                                if(floats[i].dataset.priority == null){
+                                    floats[i].innerHTML = Priority(2)
+                                    saunas[j].innerHTML = Priority(2)
+                                    massages[k].innerHTML = Priority(2)
+                                    floats[i].dataset.priority = 2;
+                                    saunas[j].dataset.priority = 2;
+                                    massages[k].dataset.priority = 2;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            //Priority 1 no additional massage
+            //massage > sauna > float
+            if(saunaTimes[j] == floatTime - 60){
+                for(let k = 0; k < massageTimes.length; k ++){
+                    if(noOverlap(getRoomNumber(massages[k].dataset.dropDescription), massageTimes[k], massageTimes[k] + massageDuration)){
+                        if(massageTimes[k] == floatTime - 60 - massageDuration){
+                            if(!valueInArrayExcluding(massageTimes[k], massageTimes, k)){
+                                if(floats[i].dataset.priority != null && floats[i].dataset.priority <= 1){
+                                    floats[i].innerHTML = Priority(1)
+                                    saunas[j].innerHTML = Priority(1)
+                                    massages[k].innerHTML = Priority(1)
+                                    floats[i].dataset.priority = 1;
+                                    saunas[j].dataset.priority = 1;
+                                    massages[k].dataset.priority = 1;
+                                }
+                                if(floats[i].dataset.priority == null){
+                                    floats[i].innerHTML = Priority(1)
+                                    saunas[j].innerHTML = Priority(1)
+                                    massages[k].innerHTML = Priority(1)
+                                    floats[i].dataset.priority = 1;
+                                    saunas[j].dataset.priority = 1;
+                                    massages[k].dataset.priority = 1;
+                                }
+                            }
+                            //Priority 2 additional massage
+                            else{
+                                if(floats[i].dataset.priority != null && floats[i].dataset.priority <= 2){
+                                    floats[i].innerHTML = Priority(2)
+                                    saunas[j].innerHTML = Priority(2)
+                                    massages[k].innerHTML = Priority(2)
+                                    floats[i].dataset.priority = 2;
+                                    saunas[j].dataset.priority = 2;
+                                    massages[k].dataset.priority = 2;
+                                }
+                                if(floats[i].dataset.priority == null){
+                                    floats[i].innerHTML = Priority(2)
+                                    saunas[j].innerHTML = Priority(2)
+                                    massages[k].innerHTML = Priority(2)
+                                    floats[i].dataset.priority = 2;
+                                    saunas[j].dataset.priority = 2;
+                                    massages[k].dataset.priority = 2;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+function findBestCCWP(floats, saunas, massages, massageDuration){
+    for(let i = 0; i < floats.length; i ++){
+        let floatTime = getAbsoluteTime(floats[i].dataset.dropDescription)
+        for(let j = 0; j < saunaTimes.length; j ++){
+            //Priority 1 basic ccwp
+            //sauna > float > massage
+            if(saunaTimes[j] == floatTime - 60){
+                for(let k = 0; k < massageTimes.length; k ++){
+                    if(noOverlap(getRoomNumber(massages[k].dataset.dropDescription), massageTimes[k], massageTimes[k] + massageDuration)){
+                        if(massageTimes[k] == floatTime + 90){
+                            if(valueInArrayExcluding(massageTimes[k], massageTimes, k)){
+                                if(floats[i].dataset.priority != null && floats[i].dataset.priority <= 1){
+                                    floats[i].innerHTML = Priority(1)
+                                    saunas[j].innerHTML = Priority(1)
+                                    massages[k].innerHTML = Priority(1)
+                                    floats[i].dataset.priority = 1;
+                                    saunas[j].dataset.priority = 1;
+                                    massages[k].dataset.priority = 1;
+                                }
+                                if(floats[i].dataset.priority == null){
+                                    floats[i].innerHTML = Priority(1)
+                                    saunas[j].innerHTML = Priority(1)
+                                    massages[k].innerHTML = Priority(1)
+                                    floats[i].dataset.priority = 1;
+                                    saunas[j].dataset.priority = 1;
+                                    massages[k].dataset.priority = 1;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            //massage > sauna > float
+            if(saunaTimes[j] == floatTime - 60){
+                for(let k = 0; k < massageTimes.length; k ++){
+                    if(noOverlap(getRoomNumber(massages[k].dataset.dropDescription), massageTimes[k], massageTimes[k] + massageDuration)){
+                        if(massageTimes[k] == floatTime - 60 - massageDuration){
+                            if(valueInArrayExcluding(massageTimes[k], massageTimes, k)){
+                                if(floats[i].dataset.priority != null && floats[i].dataset.priority <= 1){
+                                    floats[i].innerHTML = Priority(1)
+                                    saunas[j].innerHTML = Priority(1)
+                                    massages[k].innerHTML = Priority(1)
+                                    floats[i].dataset.priority = 1;
+                                    saunas[j].dataset.priority = 1;
+                                    massages[k].dataset.priority = 1;
+                                }
+                                if(floats[i].dataset.priority == null){
+                                    floats[i].innerHTML = Priority(1)
+                                    saunas[j].innerHTML = Priority(1)
+                                    massages[k].innerHTML = Priority(1)
+                                    floats[i].dataset.priority = 1;
+                                    saunas[j].dataset.priority = 1;
+                                    massages[k].dataset.priority = 1;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            //sauna > massage > float
+            if(saunaTimes[j] == floatTime - massageDuration - 60){
+                for(let k = 0; k < massageTimes.length; k ++){
+                    if(noOverlap(getRoomNumber(massages[k].dataset.dropDescription), massageTimes[k], massageTimes[k] + massageDuration)){
+                        if(massageTimes[k] == floatTime - massageDuration){
+                            if(valueInArrayExcluding(massageTimes[k], massageTimes, k)){
+                                if(floats[i].dataset.priority != null && floats[i].dataset.priority <= 1){
+                                    floats[i].innerHTML = Priority(1)
+                                    saunas[j].innerHTML = Priority(1)
+                                    massages[k].innerHTML = Priority(1)
+                                    floats[i].dataset.priority = 1;
+                                    saunas[j].dataset.priority = 1;
+                                    massages[k].dataset.priority = 1;
+                                }
+                                if(floats[i].dataset.priority == null){
+                                    floats[i].innerHTML = Priority(1)
+                                    saunas[j].innerHTML = Priority(1)
+                                    massages[k].innerHTML = Priority(1)
+                                    floats[i].dataset.priority = 1;
+                                    saunas[j].dataset.priority = 1;
+                                    massages[k].dataset.priority = 1;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 function getAbsoluteTime(time) {
